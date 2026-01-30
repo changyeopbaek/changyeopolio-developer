@@ -1,123 +1,142 @@
-import { useTypingEffect } from "../hooks/useTypingEffect";
-import { DownloadIcon } from "./Icons";
+import { useEffect, useRef } from "react";
+import selfImage from "/self.jpg";
 import styles from "./Hero.module.css";
 
+const LERP_FACTOR_1 = 0.08; // 1번이 마우스를 따라가는 속도
+const LERP_FACTOR_2 = 0.045; // 2번이 1번을 따라가는 속도 (너무 작으면 거의 안 움직임)
+const LERP_FACTOR_3 = 0.055; // 3번이 2번을 따라가는 속도
+const LERP_TILT = 0.06; // 기울기 보간 속도
+const MOVE_SCALE = 100; // 마우스 이동량 스케일
+const MAX_TILT_DEG = 14; // 좌/우 끝에서 ±7deg (target.x≈±50 기준)
+
+function lerp(current: number, target: number, factor: number): number {
+  return current + (target - current) * factor;
+}
+
 export const Hero = () => {
-  const { displayedText } = useTypingEffect(
-    " 좋은 서비스가 무엇인지 항상 고민하며 설계하는 백창엽입니다.",
-    100,
-    1000
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
+  const card1Ref = useRef<HTMLDivElement>(null);
+  const card2Ref = useRef<HTMLDivElement>(null);
+  const card3Ref = useRef<HTMLDivElement>(null);
 
-  const handleDownload = () => {
-    try {
-      const link = document.createElement("a");
-      link.href = "/resume.pdf";
-      link.download = "백창엽_이력서.pdf";
-      link.target = "_blank";
+  const targetRef = useRef({ x: 0, y: 0 });
+  const pos1Ref = useRef({ x: 0, y: 0 });
+  const pos2Ref = useRef({ x: 0, y: 0 });
+  const pos3Ref = useRef({ x: 0, y: 0 });
+  const tiltRef = useRef(0); // 현재 기울기(deg), 좌=음수 반시계 / 우=양수 시계
+  const rafRef = useRef<number>(0);
 
-      link.onerror = () => {
-        alert(
-          "이력서 파일을 찾을 수 없습니다.\n\n사용 방법:\n1. 이력서 PDF 파일을 public 폴더에 추가\n2. 파일명을 resume.pdf로 지정"
-        );
-      };
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+      const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+      targetRef.current = { x: x * MOVE_SCALE, y: y * MOVE_SCALE };
+    };
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      alert(
-        "이력서 다운로드 중 오류가 발생했습니다.\n\n사용 방법:\n1. 이력서 PDF 파일을 public 폴더에 추가\n2. 파일명을 resume.pdf로 지정"
-      );
+    const handleMouseLeave = () => {
+      targetRef.current = { x: 0, y: 0 };
+    };
+
+    const tick = () => {
+      const target = targetRef.current;
+      const p1 = pos1Ref.current;
+      const p2 = pos2Ref.current;
+      const p3 = pos3Ref.current;
+
+      p1.x = lerp(p1.x, target.x, LERP_FACTOR_1);
+      p1.y = lerp(p1.y, target.y, LERP_FACTOR_1);
+      p2.x = lerp(p2.x, p1.x, LERP_FACTOR_2);
+      p2.y = lerp(p2.y, p1.y, LERP_FACTOR_2);
+      p3.x = lerp(p3.x, p2.x, LERP_FACTOR_3);
+      p3.y = lerp(p3.y, p2.y, LERP_FACTOR_3);
+
+      // 좌측=반시계(음수) / 우측=시계(양수) 기울기, 정규화된 x = target.x / MOVE_SCALE
+      const tiltTarget = (target.x / MOVE_SCALE) * MAX_TILT_DEG;
+      tiltRef.current = lerp(tiltRef.current, tiltTarget, LERP_TILT);
+      const tilt = tiltRef.current;
+
+      // 서브픽셀 translate/rotate는 레이어 블러 원인 → 픽셀/각도 반올림
+      const tx1 = Math.round(p1.x);
+      const ty1 = Math.round(p1.y);
+      const tx2 = Math.round(p2.x);
+      const ty2 = Math.round(p2.y);
+      const tx3 = Math.round(p3.x);
+      const ty3 = Math.round(p3.y);
+      const tiltDeg = Math.round(tilt * 10) / 10;
+
+      if (card1Ref.current)
+        card1Ref.current.style.transform = `translate(${tx1}px, ${ty1}px) rotateZ(${tiltDeg}deg)`;
+      if (card2Ref.current)
+        card2Ref.current.style.transform = `translate(${tx2}px, ${ty2}px) scale(0.95) rotateZ(${tiltDeg}deg)`;
+      if (card3Ref.current)
+        card3Ref.current.style.transform = `translate(${tx3}px, ${ty3}px) scale(0.9) rotateZ(${tiltDeg}deg)`;
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("mousemove", handleMouseMove);
+      container.addEventListener("mouseleave", handleMouseLeave);
     }
-  };
-
-  const handlePortfolio1 = () => {
-    window.open("/portfolio-1.html", "_blank");
-  };
-
-  const handlePortfolio2 = () => {
-    window.open("/portfolio-2.html", "_blank");
-  };
-
-  const handleScrollDown = () => {
-    const aboutSection = document.getElementById("about");
-    if (aboutSection) {
-      const headerHeight = 80;
-      const targetPosition =
-        aboutSection.getBoundingClientRect().top +
-        window.pageYOffset -
-        headerHeight;
-      window.scrollTo({
-        top: targetPosition,
-        behavior: "smooth",
-      });
-    }
-  };
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      if (container) {
+        container.removeEventListener("mousemove", handleMouseMove);
+        container.removeEventListener("mouseleave", handleMouseLeave);
+      }
+    };
+  }, []);
 
   return (
     <section className={styles.hero} id="hero">
-      <div className={styles.content}>
-        <h1 className={styles.title}>VICTORY LOVES PREPARATION</h1>
-        <p className={styles.subtitle}>
-          <span>{displayedText}</span>
-          <span className={styles.cursor}>|</span>
-        </p>
-
-        <div className={styles.buttons}>
-          <button
-            onClick={handleDownload}
-            className={`${styles.button} ${styles.primary}`}
-          >
-            <DownloadIcon />
-            이력서 Download
-          </button>
-          <button
-            onClick={handlePortfolio1}
-            className={`${styles.button} ${styles.secondary} ${styles.tooltipButton}`}
-            data-tooltip="2020년 ~ 2023년 까지의 경험이 담겨있습니다."
-          >
-            포트폴리오-A
-          </button>
-          <button
-            onClick={handlePortfolio2}
-            className={`${styles.button} ${styles.secondary} ${styles.tooltipButton}`}
-            data-tooltip="2023년 ~ 2024년 까지의 경험이 담겨있습니다."
-          >
-            포트폴리오-B
-          </button>
+      <div className={styles.rollingLayer} aria-hidden="true">
+        <div className={styles.rollingTrack}>
+          <div className={styles.rollingContent}>
+            <span className={styles.rollingText}>CHANGYEOPOLIO</span>
+            <span className={styles.rollingText}>CHANGYEOPOLIO</span>
+          </div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <div
-        className={styles.scrollIndicator}
-        onClick={handleScrollDown}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleScrollDown();
-          }
-        }}
-        aria-label="아래로 스크롤"
-      >
-        <div className={styles.scrollText}>Scroll</div>
-        <div className={styles.scrollArrow}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3"
-            />
-          </svg>
+      <div className={styles.container} ref={containerRef}>
+        <div className={styles.cardsWrapper}>
+          <div className={`${styles.card} ${styles.card1}`} ref={card1Ref}>
+            <div className={styles.imageWrapper}>
+              <img
+                src={selfImage}
+                srcSet="/self.jpg 1x, /self2x.jpg 2x"
+                alt="Changyeop Baek"
+                className={styles.image}
+              />
+            </div>
+          </div>
+          <div className={`${styles.card} ${styles.card2}`} ref={card2Ref}>
+            <div className={styles.imageWrapper}>
+              <img
+                src={selfImage}
+                srcSet="/self.jpg 1x, /self2x.jpg 2x"
+                alt="Changyeop Baek"
+                className={styles.image}
+              />
+            </div>
+          </div>
+          <div className={`${styles.card} ${styles.card3}`} ref={card3Ref}>
+            <div className={styles.imageWrapper}>
+              <img
+                src={selfImage}
+                srcSet="/self.jpg 1x, /self2x.jpg 2x"
+                alt="Changyeop Baek"
+                className={styles.image}
+              />
+            </div>
+          </div>
+        </div>
+        <div className={styles.description}>
+          <p className={styles.descriptionText}>PURSUE DETAILED, FLEXIBLE</p>
+          <p className={styles.descriptionText}>FRONTEND DEVELOPER</p>
         </div>
       </div>
     </section>

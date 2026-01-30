@@ -1,6 +1,8 @@
 /* ===== Fonts ===== */
-@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap");
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Limelight&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rouge+Script&display=swap");
 
 /* ===== CSS Variables ===== */
 :root {
@@ -17,14 +19,15 @@
   /* Neumorphism Shadows - Light */
   --shadow-light: #ffffff;
   --shadow-dark: #bebebe;
-  --neu-shadow: 8px 8px 16px var(--shadow-dark),
-    -8px -8px 16px var(--shadow-light);
-  --neu-shadow-sm: 4px 4px 8px var(--shadow-dark),
-    -4px -4px 8px var(--shadow-light);
-  --neu-shadow-inset: inset 4px 4px 8px var(--shadow-dark),
+  --neu-shadow:
+    8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+  --neu-shadow-sm:
+    4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  --neu-shadow-inset:
+    inset 4px 4px 8px var(--shadow-dark),
     inset -4px -4px 8px var(--shadow-light);
-  --neu-shadow-hover: 12px 12px 20px var(--shadow-dark),
-    -12px -12px 20px var(--shadow-light);
+  --neu-shadow-hover:
+    12px 12px 20px var(--shadow-dark), -12px -12px 20px var(--shadow-light);
 
   /* Card */
   --card-bg: #e8e8e8;
@@ -32,38 +35,45 @@
   /* Timeline */
   --timeline-line: #d0d0d0;
 
+  /* 세로줄 (Hero·Skills·Comments 등 통일) */
+  --line-vertical: rgba(0, 0, 0, 0.2);
+
   /* Transition */
   --transition-speed: 0.3s;
 }
 
 [data-theme="dark"] {
-  /* Dark Theme (Black Neumorphism with Blue Focus) */
-  --bg-primary: #0a0a0a;
+  /* Dark Theme - 페이지 전체 배경 (카드 배경과 구분) */
+  --bg-primary: #0d0d12;
   --bg-secondary: #111111;
   --text-primary: #f0f0f0;
   --text-secondary: #999999;
-  --accent-color: #4d96ff;
-  --accent-hover: #6ba8ff;
-  --accent-light: rgba(77, 150, 255, 0.15);
-  --accent-glow: rgba(77, 150, 255, 0.3);
+  --accent-color: #ffffff;
+  --accent-hover: #cccccc;
+  --accent-light: rgba(255, 255, 255, 0.1);
+  --accent-glow: rgba(255, 255, 255, 0.2);
 
   /* Neumorphism Shadows - Dark (Black) */
   --shadow-light: #1a1a1a;
   --shadow-dark: #000000;
-  --neu-shadow: 8px 8px 16px var(--shadow-dark),
-    -8px -8px 16px var(--shadow-light);
-  --neu-shadow-sm: 4px 4px 8px var(--shadow-dark),
-    -4px -4px 8px var(--shadow-light);
-  --neu-shadow-inset: inset 4px 4px 8px var(--shadow-dark),
+  --neu-shadow:
+    8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+  --neu-shadow-sm:
+    4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  --neu-shadow-inset:
+    inset 4px 4px 8px var(--shadow-dark),
     inset -4px -4px 8px var(--shadow-light);
-  --neu-shadow-hover: 12px 12px 20px var(--shadow-dark),
-    -12px -12px 20px var(--shadow-light);
+  --neu-shadow-hover:
+    12px 12px 20px var(--shadow-dark), -12px -12px 20px var(--shadow-light);
 
   /* Card */
   --card-bg: #0a0a0a;
 
   /* Timeline */
   --timeline-line: #222222;
+
+  /* 세로줄 (Hero·Skills·Comments 등 통일) */
+  --line-vertical: rgba(255, 255, 255, 0.45);
 }
 
 /* ===== Reset & Base ===== */
@@ -78,12 +88,17 @@ html {
 }
 
 body {
-  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI",
+  font-family:
+    "DM Sans",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  transition: background-color var(--transition-speed),
+  transition:
+    background-color var(--transition-speed),
     color var(--transition-speed);
   overflow-x: hidden;
   user-select: none;
@@ -120,10 +135,17 @@ body {
 .fade-in {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* 섹션 타이틀: 쉼표 뒤 문구도 DM Sans */
+.title-serif {
+  font-family: "DM Sans", sans-serif;
 }

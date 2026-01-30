@@ -1,129 +1,351 @@
+/* 스크롤 시 카드들이 1번 위치로 올라와 덮이는 효과, 하단 여백 최소화 */
 .section {
-  padding: 6rem 2rem;
+  min-height: calc(100vh + (var(--skills-card-count, 5) - 1) * 20vh);
+  padding: 40px 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background-color: var(--bg-primary);
 }
+
+/* 세로줄은 Layout에서 전역으로 그리므로 여기서 중복하지 않음 */
 
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  --skills-card-count: 5;
 }
 
+/* 다른 섹션과 동일: 가운데 정렬, 크기 맞춤 */
 .title {
-  font-family: "Fira Code", monospace;
-  font-size: 2rem;
-  color: var(--accent-color);
-  margin-bottom: 3rem;
-  text-align: center;
-  user-select: none;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
-
-.card {
-  background-color: var(--card-bg);
-  border-radius: 24px;
-  padding: 2rem;
-  box-shadow: var(--neu-shadow);
-  transition: all var(--transition-speed);
-  overflow: hidden;
-}
-
-.card:hover {
-  box-shadow: var(--neu-shadow-hover);
-}
-
-.categoryTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-family: "DM Sans", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: 0em;
   color: var(--text-primary);
-  margin-bottom: 1.5rem;
+  text-align: center;
+  margin-bottom: 4rem;
+  text-transform: uppercase;
+}
+
+/* 컬럼 방향으로 카드 배치, 스크롤 시 1번 카드 위치에서 sticky로 덮임 */
+.cardsWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 705px;
+  margin: 0 auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  user-select: none;
+  gap: 12vh;
+  padding-bottom: 1rem;
 }
 
-.categoryIcon {
-  font-size: 1.5rem;
-}
-
-.skillsList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.skillItem {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: var(--neu-shadow-sm);
-  transition: all var(--transition-speed);
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
-.skillItem:hover {
-  box-shadow: var(--neu-shadow);
-  color: var(--accent-color);
-}
-
-.skillIconWrapper {
-  width: 24px;
-  height: 24px;
+/* 모든 카드 1번과 동일 크기 (705x320), 스케일 변동 없음 */
+.card {
+  position: sticky;
+  top: 15vh;
+  width: 705px;
+  height: 320px;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: linear-gradient(
+    -135deg,
+    #0f1218 0%,
+    #0f1d35 28%,
+    #0c121a 50%,
+    #0a1830 75%,
+    #0f1218 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  transition: box-shadow 0.4s ease-out;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.skillIconWrapper svg {
-  width: 24px;
-  height: 24px;
-  color: var(--text-primary);
+.cardInner {
+  width: 705px;
+  height: 320px;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.skillIcon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
+/* 오른쪽 상단 번호 (Instrument Serif, 200px, fill 투명·스트로크만) */
+.cardNumber {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: "Instrument Serif", serif;
+  font-size: 200px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0);
+  -webkit-text-stroke: 1px color-mix(in srgb, #f6f3f0 4%, transparent);
+  pointer-events: none;
+  z-index: 1;
+  line-height: 1;
 }
 
-[data-theme="dark"] .skillIcon {
-  filter: brightness(1.1);
+/* Comments 카드와 동일: 오른쪽 상단 옅은 원형 그라디언트 */
+.card::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 80%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(20, 32, 54, 0.35) 0%,
+    rgba(13, 24, 41, 0.2) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
 
-.skillItem span {
-  font-size: 0.9rem;
+/* 왼쪽 상단 38x38 radius 10px 아이콘 영역 - 배경에 rgba로 opacity 적용 */
+.cardIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(13, 13, 18, 0.4);
+  box-shadow:
+    0 2px 5px 0 #0055fe59,
+    inset 0 0 0 1px rgba(246, 243, 240, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "DM Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(246, 243, 240, 0.64);
+  flex-shrink: 0;
+  margin-bottom: 0.25rem;
+}
+
+.cardTitle {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #f6f3f0;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+/* 프로그램 태그: 아이콘 + 이름 pill */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 60px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(246, 243, 240, 0.08);
+  border: 1px solid rgba(246, 243, 240, 0.12);
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.75rem;
   font-weight: 500;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  color: rgba(246, 243, 240, 0.9);
+  flex-shrink: 0;
 }
 
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr;
+.tagIcon {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(0, 85, 254, 0.9);
+  opacity: 0.95;
+}
+
+.tagIconImg {
+  width: 1em;
+  height: 1em;
+  min-width: 14px;
+  min-height: 14px;
+  object-fit: contain;
+  display: block;
+}
+
+.tagName {
+  letter-spacing: 0.02em;
+}
+
+.cardContent {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: rgba(246, 243, 240, 0.85);
+  line-height: 1.55;
+  margin-top: auto;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  flex: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+/* 태블릿: 카드 width 축소 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .section {
+    padding: 40px 1.5rem;
+  }
+
+  .cardsWrapper {
+    max-width: 92%;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 620px;
+    height: 282px;
+  }
+
+  .cardInner {
+    max-width: 620px;
+    height: 282px;
+    padding: 1.25rem 1.5rem;
+    justify-content: flex-start;
+  }
+
+  .cardNumber {
+    font-size: 160px;
   }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 4rem 1.5rem;
+    padding: 40px 1rem 40px;
+    min-height: calc(100vh + (var(--skills-card-count, 5) - 1) * 12vh);
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .titleLine1,
+  .titleLine2 {
+    display: block;
+  }
+
+  .cardsWrapper {
+    gap: 12vh;
+    padding-bottom: 1rem;
+    max-width: 92%;
+  }
+
+  .card {
+    width: 100%;
+    max-width: min(560px, calc(100vw - 2.5rem));
+    height: 320px;
+    top: 12vh;
+  }
+
+  .cardInner {
+    width: 100%;
+    max-width: min(560px, calc(100vw - 2.5rem));
+    padding: 1.5rem 1.25rem 1.25rem;
+    justify-content: flex-start;
+    gap: 0.6rem;
+  }
+
+  .cardTitle {
+    font-size: 1.1rem;
+  }
+
+  .tag {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .tagIcon {
+    font-size: 0.6rem;
+  }
+
+  .cardContent {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .cardNumber {
+    font-size: 120px;
   }
 }
 
 @media (max-width: 480px) {
+  .section {
+    min-height: calc(100vh + (var(--skills-card-count, 5) - 1) * 10vh);
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .cardsWrapper {
+    gap: 10vh;
+    max-width: 90%;
+  }
+
   .card {
-    padding: 1.5rem;
-    border-radius: 16px;
+    max-width: min(480px, calc(100vw - 2rem));
+    height: 300px;
+    top: 10vh;
+  }
+
+  .cardInner {
+    max-width: min(480px, calc(100vw - 2rem));
+    padding: 1.25rem 1rem 1rem;
+    justify-content: flex-start;
+  }
+
+  .cardIcon {
+    width: 34px;
+    height: 34px;
+    font-size: 0.875rem;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+  }
+
+  .tag {
+    padding: 0.2rem 0.45rem;
+    font-size: 0.65rem;
+  }
+
+  .tagIcon {
+    font-size: 0.55rem;
+  }
+
+  .cardContent {
+    font-size: 0.6875rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .cardNumber {
+    font-size: 80px;
   }
 }

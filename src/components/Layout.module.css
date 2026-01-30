@@ -1,0 +1,63 @@
+/* 콘텐츠 최대 너비 1080px, 헤더~푸터 세로줄 */
+.contentColumn {
+  position: relative;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* 헤더 fixed로 인한 레이아웃 높이 확보 */
+.headerSpacer {
+  height: 100px;
+  flex-shrink: 0;
+}
+
+/* 세로줄 컨테이너 - contentColumn 전체 높이, 히어로·전체 위에 표시 */
+.lineContainer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.lineVertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--line-vertical);
+}
+
+.lineVerticalLeft {
+  left: 0;
+}
+
+.lineVerticalRight {
+  right: 0;
+}
+
+/* 모바일: 세로줄 좌/우 10px 지점에 위치 */
+@media (max-width: 768px) {
+  .lineVerticalLeft {
+    left: 10px;
+  }
+
+  .lineVerticalRight {
+    right: 10px;
+  }
+}
+
+/* 태블릿: 세로줄 좌/우 20px 지점에 위치 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .lineVerticalLeft {
+    left: 20px;
+  }
+
+  .lineVerticalRight {
+    right: 20px;
+  }
+}

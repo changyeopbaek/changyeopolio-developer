@@ -1,7 +1,13 @@
+export { Layout } from "./Layout";
+export { SectionDivider } from "./SectionDivider";
 export { Header } from "./Header";
 export { Hero } from "./Hero";
 export { About } from "./About";
+export { Categories } from "./Categories";
 export { Skills } from "./Skills";
+export { Work } from "./Work";
+export { Career } from "./Career";
+export { Comments } from "./Comments";
 export { Projects } from "./Projects";
 export { Contact } from "./Contact";
 export { Footer } from "./Footer";

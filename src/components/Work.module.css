@@ -1,0 +1,371 @@
+.section {
+  position: relative;
+  padding: 40px 2rem;
+  background-color: var(--bg-primary);
+  min-height: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* 프로젝트 카드 이미지 Y축 크롭: 0% 위쪽, 50% 중앙, 100% 아래쪽 */
+  --project-image-position-y: 30%;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: "DM Sans", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 4rem;
+  text-transform: uppercase;
+}
+
+/* 양쪽 그라디언트 쉐도우 (영역 축소) */
+.viewportWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 1px;
+  box-sizing: border-box;
+}
+
+.viewportWrapper::before,
+.viewportWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.viewportWrapper::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    var(--bg-primary) 30%,
+    transparent 100%
+  );
+}
+
+.viewportWrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-primary) 30%, transparent 100%);
+}
+
+/* 745x447 비율 마스크 영역 (모바일/태블릿에서 width에 맞춰 비율 유지) */
+.carouselViewport {
+  position: relative;
+  width: 745px;
+  height: 447px;
+  max-width: calc(100vw - 4rem);
+  margin: 0 auto;
+  overflow: visible;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.trackBlurred {
+  display: flex;
+  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  filter: blur(4px);
+  opacity: 0.85;
+  transition: transform 0.5s ease;
+  will-change: transform;
+  z-index: 0;
+}
+
+.maskWindow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+  z-index: 1;
+}
+
+.trackSharp {
+  display: flex;
+  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+
+.trackBlurred.noTransition,
+.trackSharp.noTransition {
+  transition: none;
+}
+
+.projectCard {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transform-origin: center center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* 카드 전체 영역 호버/클릭을 위한 투명 오버레이 */
+.projectCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.projectCard:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* 카드 전체를 채우는 이미지 영역 */
+.cardImageWrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Y축 크롭: 0% = 위쪽 기준, 50% = 중앙, 100% = 아래쪽 기준 (원하는 구간이 보이도록 조절) */
+.projectImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center var(--project-image-position-y, 50%);
+  display: block;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* 카드 오른쪽 상단 반투명 태그 */
+.projectTags {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.projectTag {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: rgba(246, 243, 240, 0.95);
+  letter-spacing: 0em;
+  white-space: nowrap;
+}
+
+/* 이미지 위 반투명 오버레이: 프로젝트 이름·설명 (하단에 더 붙임) */
+.projectInfoOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.85rem 1.25rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.4) 70%,
+    transparent 100%
+  );
+}
+
+.projectTitle {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f6f3f0;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0em;
+}
+
+.projectDescription {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: rgba(246, 243, 240, 0.88);
+  line-height: 1.45;
+  margin: 0;
+  letter-spacing: 0em;
+}
+
+/* 캐러셀 인디케이터(닷) */
+.indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color 0.25s ease,
+    width 0.25s ease;
+}
+
+.indicator:hover {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.indicatorActive {
+  background-color: #0055fe;
+  width: 28px;
+  border-radius: 6px;
+}
+
+/* Comments와 동일: 좌우 화살표 버튼 (캐러셀 중앙 기준 배치) */
+.navButton {
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: #0055fe;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease-out;
+  z-index: 10;
+}
+
+.navButton:hover {
+  background-color: #0046d4;
+  color: #fff;
+}
+
+.navButtonIcon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.navButtonRight {
+  left: 50%;
+}
+
+/* 태블릿: 뷰포트 비율 유지, 화살표 노출 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .section {
+    padding: 40px 1.5rem;
+  }
+
+  .carouselViewport {
+    width: min(745px, calc(100vw - 4rem));
+    height: auto;
+    aspect-ratio: 745 / 447;
+  }
+
+  .navButton {
+    width: 38px;
+    height: 38px;
+    z-index: 15;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    min-height: 400px;
+    padding: 40px 1rem;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .titleLine1,
+  .titleLine2 {
+    display: block;
+  }
+
+  .carouselViewport {
+    width: min(745px, calc(100vw - 2.5rem));
+    height: auto;
+    aspect-ratio: 745 / 447;
+  }
+
+  .navButton {
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+    z-index: 15;
+  }
+}
+
+@media (max-width: 480px) {
+  .carouselViewport {
+    width: calc(100vw - 2rem);
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}

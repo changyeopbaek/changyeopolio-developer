@@ -1,0 +1,111 @@
+.section {
+  padding: 40px 0;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.container {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 히어로 롤링 텍스트와 동일: 양쪽 그라디언트 쉐도우 */
+.scrollWrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding: 0 1px;
+  box-sizing: border-box;
+}
+
+.scrollWrapper::before,
+.scrollWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.scrollWrapper::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    var(--bg-primary) 30%,
+    transparent 100%
+  );
+}
+
+.scrollWrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-primary) 30%, transparent 100%);
+}
+
+.scrollContent {
+  display: flex;
+  gap: 4rem;
+  animation: scroll 10s linear infinite;
+  will-change: transform;
+}
+
+.category {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0em;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.category:hover,
+.category a:hover {
+  color: var(--text-primary);
+}
+
+.category a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 무한 루프: 3복사본이므로 한 복사본 너비만큼만 이동 (끊김 없음) */
+@keyframes scroll {
+  from {
+    transform: translateX(calc(-100% / 3));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 40px 0;
+  }
+
+  .category {
+    font-size: 1.2rem;
+  }
+
+  .scrollContent {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category {
+    font-size: 1rem;
+  }
+
+  .scrollContent {
+    gap: 2rem;
+  }
+}

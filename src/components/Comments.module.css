@@ -1,0 +1,371 @@
+.section {
+  position: relative;
+  padding: 40px 2rem;
+  background-color: var(--bg-primary);
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 세로줄은 Layout에서 전역으로 그리므로 여기서 중복하지 않음 */
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.title {
+  font-family: "DM Sans", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: 0em;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 4rem;
+  text-transform: uppercase;
+}
+
+/* Hero 롤링 텍스트와 동일: 양쪽 그라디언트 쉐도우 */
+.viewportWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 1px;
+  box-sizing: border-box;
+}
+
+.viewportWrapper::before,
+.viewportWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 150px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.viewportWrapper::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    var(--bg-primary) 30%,
+    transparent 100%
+  );
+}
+
+.viewportWrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-primary) 30%, transparent 100%);
+}
+
+/* 328x360 마스크 영역 + 파란 테두리 + 박스쉐도우, 밖은 블러만 보임 */
+.carouselViewport {
+  position: relative;
+  width: 328px;
+  height: 360px;
+  margin: 0 auto;
+  overflow: visible;
+  border-radius: 16px;
+}
+
+/* 아웃라인을 맨 위 레이어로 그려 이동 중에도 항상 보이게 (자식 트랙이 테두리를 가리지 않음) */
+.carouselViewport::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid #032d81;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 2px #032d8140;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 뒤쪽: 전체 트랙 블러 (마스크 밖까지 다 보임) */
+.trackBlurred {
+  display: flex;
+  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  filter: blur(4px);
+  opacity: 0.85;
+  transition: transform 0.5s ease;
+  will-change: transform;
+  z-index: 0;
+}
+
+/* 앞쪽: 328x360 안만 선명하게 보이는 마스크 */
+.maskWindow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 328px;
+  height: 360px;
+  overflow: hidden;
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.trackSharp {
+  display: flex;
+  flex-shrink: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+
+/* 무한 루프 리셋 시 전환 없이 점프 */
+.trackBlurred.noTransition,
+.trackSharp.noTransition {
+  transition: none;
+}
+
+.card {
+  position: relative;
+  flex-shrink: 0;
+  padding: 24px;
+  border-radius: 12px;
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* 카드 오른쪽 상단 옅은 원형 그라디언트 */
+/* 카드 오른쪽 상단: Contact/Career 스타일 푸른색 원형 그라디언트 */
+.card::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 80%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(20, 32, 54, 0.35) 0%,
+    rgba(13, 24, 41, 0.2) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quoteIcon {
+  width: 20px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.commentLabel {
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.comment {
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  user-select: none;
+}
+
+.author {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.03em;
+  margin: 0;
+  padding-top: 0.5rem;
+  user-select: none;
+}
+
+.quoteIconAuthor {
+  width: 16px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* 슬라이드 인디케이터 (Work와 동일) */
+.indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background-color 0.25s ease,
+    width 0.25s ease;
+}
+
+.indicator:hover {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.indicatorActive {
+  background-color: #0055fe;
+  width: 28px;
+  border-radius: 6px;
+}
+
+/* 좌우 화살표: 캐러셀 양쪽에 고정 노출 */
+.navButton {
+  position: absolute;
+  top: 57%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
+  margin-left: calc(-164px - 40px);
+  border-radius: 50%;
+  border: none;
+  background-color: #0055fe;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease-out;
+  z-index: 15;
+}
+
+.navButton:hover {
+  background-color: #0055fe;
+  color: #fff;
+}
+
+.navButtonIcon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.navButtonRight {
+  left: 50%;
+  margin-left: calc(164px + 40px);
+}
+
+/* 태블릿: 마스크·화살표 최적화 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .section {
+    padding: 5rem 1.5rem;
+  }
+
+  .carouselViewport {
+    width: min(328px, calc(100vw - 4rem));
+  }
+
+  .carouselViewport::after {
+    box-shadow: 0 2px 10px 2px #032d8135;
+  }
+
+  .navButton {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 40px 1rem;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .titleLine1,
+  .titleLine2 {
+    display: block;
+  }
+
+  .viewportWrapper::before,
+  .viewportWrapper::after {
+    width: 38px;
+  }
+
+  .carouselViewport {
+    width: min(328px, calc(100vw - 2.5rem));
+    height: 360px;
+  }
+
+  .maskWindow {
+    width: 100%;
+    height: 100%;
+  }
+
+  .carouselViewport::after {
+    box-shadow: 0 2px 10px 2px #032d8135;
+  }
+
+  .navButton {
+    left: 1rem;
+    margin-left: 0;
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+  }
+
+  .navButtonRight {
+    left: auto;
+    right: 1rem;
+    margin-left: 0;
+  }
+}

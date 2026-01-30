@@ -1,93 +1,168 @@
 .section {
-  padding: 6rem 2rem;
+  background-color: var(--bg-primary);
+  min-height: 400px;
+  padding: 40px 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  position: relative;
+  width: 90%;
+  max-width: 90%;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 2rem;
+  /* 왼쪽 위 → 오른쪽 아래: 원색(중성) / 푸른색 / 원색 / 푸른색 번갈아 */
+  background: linear-gradient(
+    -135deg,
+    #0f1218 0%,
+    #0f1d35 28%,
+    #0c121a 50%,
+    #0a1830 75%,
+    #0f1218 100%
+  );
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
 }
 
 .title {
-  font-family: "Fira Code", monospace;
-  font-size: 2rem;
-  color: var(--accent-color);
-  margin-bottom: 3rem;
-  text-align: center;
-  user-select: none;
-}
-
-.content {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.text {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
+  font-family: "DM Sans", sans-serif;
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: 0em;
+  color: rgba(246, 243, 240, 0.85);
   margin-bottom: 2rem;
+  text-transform: uppercase;
   user-select: none;
+}
+
+.description {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: rgba(246, 243, 240, 0.85);
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  user-select: none;
+}
+
+/* 데스크톱·태블릿: 2줄 (고민하며 | 저만의 기준을...) */
+.descDesktop {
+  display: block;
+}
+
+.descDesktop .descLine {
+  display: block;
+}
+
+.descMobile {
+  display: none;
 }
 
 .buttons {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .button {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 1rem 2.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease-out,
+    box-shadow 0.35s ease-out,
+    background-color 0.35s ease-out,
+    border-color 0.35s ease-out;
+  text-transform: uppercase;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  border-radius: 16px;
-  font-size: 1rem;
-  font-weight: 600;
-  text-decoration: none;
-  background-color: var(--bg-primary);
-  box-shadow: var(--neu-shadow);
-  transition: all var(--transition-speed);
-  cursor: pointer;
-  border: none;
-  font-family: inherit;
-  pointer-events: auto;
-  position: relative;
-  z-index: 1;
+  justify-content: center;
 }
 
-.button:hover {
-  box-shadow: var(--neu-shadow-hover);
-  transform: translateY(-3px);
+.buttonText {
+  display: inline-block;
+  transition: transform 0.2s ease-out;
 }
 
-.button:active {
-  box-shadow: var(--neu-shadow-inset);
-  transform: translateY(0);
+.button.primary {
+  background-color: #1e6afb;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(30, 106, 251, 0.35);
 }
 
-.button svg {
-  width: 20px;
-  height: 20px;
+.button.primary:hover {
+  background-color: #2d7aff;
+  box-shadow: 0 6px 28px rgba(30, 106, 251, 0.45);
 }
 
-.primary {
-  background: linear-gradient(
-    135deg,
-    var(--accent-color) 0%,
-    var(--accent-hover) 100%
-  );
-  color: white;
-  box-shadow: var(--neu-shadow), 0 4px 15px var(--accent-glow);
+.button.secondary {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.secondary {
-  color: var(--accent-color);
+.button.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    width: 90%;
+    max-width: 90%;
+  }
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 4rem 1.5rem;
+    padding: 40px 1rem;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .titleLine1,
+  .titleLine2 {
+    display: block;
+  }
+
+  .description {
+    font-size: 0.9375rem;
+    margin-bottom: 1.75rem;
+  }
+
+  /* 모바일: 4줄 버전만 표시 */
+  .descDesktop {
+    display: none;
+  }
+
+  .descMobile {
+    display: block;
+  }
+
+  .descMobile .descLine {
+    display: block;
   }
 
   .buttons {
@@ -98,6 +173,17 @@
   .button {
     width: 100%;
     max-width: 280px;
-    justify-content: center;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
   }
 }
