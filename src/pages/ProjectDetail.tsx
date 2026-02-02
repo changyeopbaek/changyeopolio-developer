@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProjectById, getPrevNextProjectIds } from "../data/projects";
 import { useBreakpoint } from "../hooks/useBreakpoint";
@@ -54,11 +54,20 @@ function viewportText(
 export const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [isPageReady, setIsPageReady] = useState(false);
+  const previousIdRef = useRef(id);
   const viewport = useBreakpoint();
-  const { ref: section2Ref, isVisible: section2Visible } = useFadeInOnScroll();
-  const { ref: section3Ref, isVisible: section3Visible } = useFadeInOnScroll();
+  const { ref: section2Ref, isVisible: section2Visible } = useFadeInOnScroll({
+    resetDependency: id,
+  });
+  const { ref: section3Ref, isVisible: section3Visible } = useFadeInOnScroll({
+    resetDependency: id,
+  });
 
-  useEffect(() => {
+  const isNewProject = id !== previousIdRef.current;
+  const showOverlay = !isPageReady || isNewProject;
+
+  useLayoutEffect(() => {
+    previousIdRef.current = id;
     window.scrollTo(0, 0);
     setIsPageReady(false);
     const t = setTimeout(() => setIsPageReady(true), PAGE_LOAD_DELAY_MS);
@@ -97,9 +106,9 @@ export const ProjectDetail = () => {
       <Layout>
         <Header activeSection={null} />
         <SectionDivider />
-        {!isPageReady && <div className={styles.pageLoading} aria-hidden />}
+        {showOverlay && <div className={styles.pageLoading} aria-hidden />}
         <div
-          className={`${styles.page} ${styles.pageContent} ${isPageReady ? styles.pageContentVisible : ""}`}
+          className={`${styles.page} ${styles.pageContent} ${!showOverlay ? styles.pageContentVisible : ""}`}
         >
           <section className={styles.sectionHero}>
             <p>프로젝트를 찾을 수 없습니다.</p>
@@ -114,9 +123,9 @@ export const ProjectDetail = () => {
     <Layout>
       <Header activeSection={null} />
       <SectionDivider />
-      {!isPageReady && <div className={styles.pageLoading} aria-hidden />}
+      {showOverlay && <div className={styles.pageLoading} aria-hidden />}
       <div
-        className={`${styles.page} ${styles.pageContent} ${isPageReady ? styles.pageContentVisible : ""}`}
+        className={`${styles.page} ${styles.pageContent} ${!showOverlay ? styles.pageContentVisible : ""}`}
       >
         {/* 섹션 1: 타이틀 + 간단 설명 + 목업 이미지 + 태그 */}
         <section className={styles.sectionHero}>

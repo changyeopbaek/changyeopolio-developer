@@ -1,12 +1,10 @@
-/* 푸터 그라디언트 (100vw 대신 100%로 가로 스크롤바 방지) */
+/* 푸터 그라디언트: 뷰포트 전체 너비(풀블리드). body overflow-x: hidden으로 가로 스크롤 방지 */
 .footerWrap {
-  width: 100%;
-  background: linear-gradient(
-    to top,
-    rgba(0, 85, 254, 0.22) 0%,
-    rgba(0, 85, 254, 0.08) 35%,
-    transparent 65%
-  );
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  background: var(--footer-gradient);
 }
 
 .footer {
