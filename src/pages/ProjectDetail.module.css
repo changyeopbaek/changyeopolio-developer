@@ -1,10 +1,33 @@
 /* 랜딩과 동일: contentColumn 내부, 세로줄은 Layout에서 처리 */
 
+/* 디테일 페이지 진입: 로딩 오버레이 (새 페이지 이동 느낌) */
+.pageLoading {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background-color: var(--bg-primary);
+  pointer-events: none;
+}
+
 .page {
   min-height: 100vh;
   background-color: var(--bg-primary);
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* 페이지 콘텐츠: 로딩 후 페이드인 */
+.pageContent {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
+}
+
+.pageContentVisible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ----- 섹션 1: 히어로 (타이틀 + 간단 설명 + 목업 이미지 + 태그) ----- */
@@ -338,12 +361,24 @@
   letter-spacing: 0em;
 }
 
-/* ----- 섹션 4: 푸터 ----- */
+/* ----- 섹션 4: 푸터 (그라디언트는 전체 페이지 너비) ----- */
+.footerGradientWrap {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 85, 254, 0.22) 0%,
+    rgba(0, 85, 254, 0.08) 35%,
+    transparent 65%
+  );
+}
+
 .sectionFooter {
   padding: 3rem 2rem;
   max-width: 1080px;
   margin: 0 auto;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
 }
 
 .footerText {

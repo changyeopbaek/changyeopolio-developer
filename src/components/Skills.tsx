@@ -100,7 +100,7 @@ export const Skills = () => {
     >
       <div className={styles.container}>
         <h2 className={styles.title}>
-          <span className={styles.titleLine1}>SKILLS,</span>
+          <span className={styles.titleLine1}>SKILLS, </span>
           <span className={`${styles.titleLine2} title-serif`}>
             WHICH I CAN USE
           </span>

@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getProjectById, getPrevNextProjectIds } from "../data/projects";
+import { useBreakpoint } from "../hooks/useBreakpoint";
+import { useFadeInOnScroll } from "../hooks/useFadeInOnScroll";
 import { Layout } from "../components/Layout";
 import { Header } from "../components/Header";
 import { SectionDivider } from "../components/SectionDivider";
@@ -35,24 +37,70 @@ function LetterHoverText({ text }: { text: string }) {
   );
 }
 
+const PAGE_LOAD_DELAY_MS = 400;
+
+/** 뷰포트별 텍스트가 있으면 그걸 쓰고, 없으면 기본값 사용 */
+function viewportText(
+  byViewport:
+    | { mobile?: string; tablet?: string; desktop?: string }
+    | undefined,
+  fallback: string | undefined,
+  viewport: "mobile" | "tablet" | "desktop",
+): string | undefined {
+  const v = byViewport?.[viewport];
+  return v !== undefined ? v : fallback;
+}
+
 export const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const [isPageReady, setIsPageReady] = useState(false);
+  const viewport = useBreakpoint();
+  const { ref: section2Ref, isVisible: section2Visible } = useFadeInOnScroll();
+  const { ref: section3Ref, isVisible: section3Visible } = useFadeInOnScroll();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setIsPageReady(false);
+    const t = setTimeout(() => setIsPageReady(true), PAGE_LOAD_DELAY_MS);
+    return () => clearTimeout(t);
   }, [id]);
+
   const projectId = id ? parseInt(id, 10) : NaN;
   const project = getProjectById(projectId);
   const { prevId, nextId } = getPrevNextProjectIds(projectId);
   const prevProject = prevId != null ? getProjectById(prevId) : null;
   const nextProject = nextId != null ? getProjectById(nextId) : null;
 
+  const fullDescription =
+    project != null
+      ? viewportText(
+          project.fullDescriptionByViewport,
+          project.fullDescription,
+          viewport,
+        )
+      : undefined;
+  const roleText =
+    project != null
+      ? viewportText(project.roleByViewport, project.role, viewport)
+      : undefined;
+  const retrospectiveText =
+    project != null
+      ? viewportText(
+          project.retrospectiveByViewport,
+          project.retrospective,
+          viewport,
+        )
+      : undefined;
+
   if (!project) {
     return (
       <Layout>
         <Header activeSection={null} />
         <SectionDivider />
-        <div className={styles.page}>
+        {!isPageReady && <div className={styles.pageLoading} aria-hidden />}
+        <div
+          className={`${styles.page} ${styles.pageContent} ${isPageReady ? styles.pageContentVisible : ""}`}
+        >
           <section className={styles.sectionHero}>
             <p>프로젝트를 찾을 수 없습니다.</p>
             <Link to="/">메인으로 돌아가기</Link>
@@ -66,7 +114,10 @@ export const ProjectDetail = () => {
     <Layout>
       <Header activeSection={null} />
       <SectionDivider />
-      <div className={styles.page}>
+      {!isPageReady && <div className={styles.pageLoading} aria-hidden />}
+      <div
+        className={`${styles.page} ${styles.pageContent} ${isPageReady ? styles.pageContentVisible : ""}`}
+      >
         {/* 섹션 1: 타이틀 + 간단 설명 + 목업 이미지 + 태그 */}
         <section className={styles.sectionHero}>
           <h1 className={styles.projectTitle}>{project.title}</h1>
@@ -92,17 +143,20 @@ export const ProjectDetail = () => {
 
         <SectionDivider />
 
-        {/* 섹션 2: 서비스명, 풀 설명, 기술 스택, 역할, 회고, 참고 링크 */}
-        <section className={styles.sectionContent}>
+        {/* 섹션 2: 서비스명, 풀 설명, 기술 스택, 역할, 회고, 참고 링크 — 뷰포트에 들어오면 페이드인 */}
+        <section
+          ref={section2Ref as React.RefObject<HTMLElement>}
+          className={`${styles.sectionContent} fade-in ${section2Visible ? "visible" : ""}`}
+        >
           {project.serviceName && (
             <div className={styles.contentBlock}>
               <h2 className={styles.serviceName}>{project.serviceName}</h2>
             </div>
           )}
-          {project.fullDescription && (
+          {fullDescription && (
             <div className={styles.contentBlock}>
               <span className={styles.blockLabel}>Full Description</span>
-              <p className={styles.blockValue}>{project.fullDescription}</p>
+              <p className={styles.blockValue}>{fullDescription}</p>
             </div>
           )}
           {project.techStack && project.techStack.length > 0 && (
@@ -115,16 +169,16 @@ export const ProjectDetail = () => {
               </ul>
             </div>
           )}
-          {project.role && (
+          {roleText && (
             <div className={styles.contentBlock}>
               <span className={styles.blockLabel}>ROLE</span>
-              <p className={styles.blockValue}>{project.role}</p>
+              <p className={styles.blockValue}>{roleText}</p>
             </div>
           )}
-          {project.retrospective && (
+          {retrospectiveText && (
             <div className={styles.contentBlock}>
               <span className={styles.blockLabel}>retrospective</span>
-              <p className={styles.blockValue}>{project.retrospective}</p>
+              <p className={styles.blockValue}>{retrospectiveText}</p>
             </div>
           )}
           {project.referenceLinks && project.referenceLinks.length > 0 && (
@@ -149,8 +203,11 @@ export const ProjectDetail = () => {
 
         <SectionDivider />
 
-        {/* 섹션 3: 다른 프로젝트 더 보기 (452x446 이전/다음 목업 카드 2개) */}
-        <section className={styles.sectionMore}>
+        {/* 섹션 3: 다른 프로젝트 더 보기 (452x446 이전/다음 목업 카드 2개) — 뷰포트에 들어오면 페이드인 */}
+        <section
+          ref={section3Ref as React.RefObject<HTMLElement>}
+          className={`${styles.sectionMore} fade-in ${section3Visible ? "visible" : ""}`}
+        >
           <h2 className={styles.sectionMoreTitle}>EXPLORE MORE PROJECTS</h2>
           <div className={styles.moreCards}>
             <div className={styles.moreCardSlot}>
@@ -240,12 +297,14 @@ export const ProjectDetail = () => {
 
         <SectionDivider />
 
-        {/* 섹션 4: 푸터 */}
-        <section className={styles.sectionFooter}>
-          <p className={styles.footerText}>
-            © 2025. BAEK CHANGYEOP. ALL rights reserved.
-          </p>
-        </section>
+        {/* 섹션 4: 푸터 (그라디언트는 전체 페이지 너비) */}
+        <div className={styles.footerGradientWrap}>
+          <section className={styles.sectionFooter}>
+            <p className={styles.footerText}>
+              © 2025. BAEK CHANGYEOP. ALL rights reserved.
+            </p>
+          </section>
+        </div>
       </div>
     </Layout>
   );

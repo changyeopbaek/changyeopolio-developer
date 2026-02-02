@@ -1,7 +1,19 @@
+/* contentColumn(1080px) 밖으로 그라디언트만 전체 뷰포트 너비로 확장 */
+.footerWrap {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 85, 254, 0.22) 0%,
+    rgba(0, 85, 254, 0.08) 35%,
+    transparent 65%
+  );
+}
+
 .footer {
   text-align: center;
   padding: 40px 2rem;
-  background-color: var(--bg-primary);
+  background: transparent;
   color: var(--text-secondary);
   font-size: 0.9rem;
   box-shadow: var(--neu-shadow-sm);
