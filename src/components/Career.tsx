@@ -71,7 +71,7 @@ export const Career = () => {
     >
       <div className={styles.container}>
         <h2 className={styles.title}>
-          <span className={styles.titleLine1}>Journey,</span>
+          <span className={styles.titleLine1}>Journey, </span>
           <span className={`${styles.titleLine2} title-serif`}>
             which I went through
           </span>

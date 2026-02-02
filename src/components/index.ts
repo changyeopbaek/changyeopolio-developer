@@ -2,7 +2,6 @@ export { Layout } from "./Layout";
 export { SectionDivider } from "./SectionDivider";
 export { Header } from "./Header";
 export { Hero } from "./Hero";
-export { About } from "./About";
 export { Categories } from "./Categories";
 export { Skills } from "./Skills";
 export { Work } from "./Work";

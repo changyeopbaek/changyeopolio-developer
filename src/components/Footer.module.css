@@ -1,7 +1,16 @@
+/* 푸터 그라디언트: 뷰포트 전체 너비(풀블리드). body overflow-x: hidden으로 가로 스크롤 방지 */
+.footerWrap {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  background: var(--footer-gradient);
+}
+
 .footer {
   text-align: center;
   padding: 40px 2rem;
-  background-color: var(--bg-primary);
+  background: transparent;
   color: var(--text-secondary);
   font-size: 0.9rem;
   box-shadow: var(--neu-shadow-sm);

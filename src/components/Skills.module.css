@@ -202,7 +202,7 @@
   -webkit-box-orient: vertical;
 }
 
-/* 태블릿: 카드 width 축소 */
+/* 태블릿: 카드 width 축소, 태그–설명 간격 축소 */
 @media (min-width: 769px) and (max-width: 1024px) {
   .section {
     padding: 40px 1.5rem;
@@ -223,6 +223,11 @@
     height: 282px;
     padding: 1.25rem 1.5rem;
     justify-content: flex-start;
+    gap: 0.4rem;
+  }
+
+  .tagList {
+    margin-bottom: 0.75rem;
   }
 
   .cardNumber {
@@ -265,9 +270,17 @@
   .cardInner {
     width: 100%;
     max-width: min(560px, calc(100vw - 2.5rem));
-    padding: 1.5rem 1.25rem 1.25rem;
+    padding: 1.5rem 1.25rem 20px 1.25rem;
     justify-content: flex-start;
-    gap: 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .tagList {
+    margin-bottom: 0.75rem;
+  }
+
+  .cardContent {
+    margin-top: auto;
   }
 
   .cardTitle {
@@ -316,8 +329,17 @@
 
   .cardInner {
     max-width: min(480px, calc(100vw - 2rem));
-    padding: 1.25rem 1rem 1rem;
+    padding: 1.25rem 1rem 20px 1rem;
     justify-content: flex-start;
+    gap: 0.35rem;
+  }
+
+  .tagList {
+    margin-bottom: 0.5rem;
+  }
+
+  .cardContent {
+    margin-top: auto;
   }
 
   .cardIcon {

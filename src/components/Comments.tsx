@@ -206,7 +206,7 @@ export const Comments = () => {
     <section className={styles.section} id="comments" ref={sectionRef}>
       <div className={styles.container}>
         <h2 className={styles.title}>
-          <span className={styles.titleLine1}>Teammates,</span>
+          <span className={styles.titleLine1}>Teammates, </span>
           <span className={`${styles.titleLine2} title-serif`}>
             who I worked with.
           </span>
