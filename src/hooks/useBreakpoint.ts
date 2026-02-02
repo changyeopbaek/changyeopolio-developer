@@ -18,16 +18,10 @@ export function useBreakpoint(): Breakpoint {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>(getBreakpoint);
 
   useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${TABLET_MAX}px)`);
     const update = () => setBreakpoint(getBreakpoint());
-
-    update();
-    mql.addEventListener("change", update);
+    update(); // SSR hydration 후 클라이언트 값 동기화
     window.addEventListener("resize", update);
-    return () => {
-      mql.removeEventListener("change", update);
-      window.removeEventListener("resize", update);
-    };
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   return breakpoint;
