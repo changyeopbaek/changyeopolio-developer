@@ -361,31 +361,6 @@
   letter-spacing: 0em;
 }
 
-/* ----- 섹션 4: 푸터 (뷰포트 전체 너비 풀블리드, body overflow-x: hidden으로 가로 스크롤 방지) ----- */
-.footerGradientWrap {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  margin-left: -50vw;
-  background: var(--footer-gradient);
-}
-
-.sectionFooter {
-  padding: 3rem 2rem;
-  max-width: 1080px;
-  margin: 0 auto;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: transparent;
-}
-
-.footerText {
-  font-family: "DM Sans", sans-serif;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin: 0;
-  text-align: center;
-}
-
 @media (max-width: 768px) {
   .sectionHero {
     padding: 3rem 1rem 3rem;

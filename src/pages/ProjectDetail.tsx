@@ -5,6 +5,7 @@ import { useBreakpoint } from "../hooks/useBreakpoint";
 import { useFadeInOnScroll } from "../hooks/useFadeInOnScroll";
 import { Layout } from "../components/Layout";
 import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
 import { SectionDivider } from "../components/SectionDivider";
 import styles from "./ProjectDetail.module.css";
 
@@ -306,14 +307,8 @@ export const ProjectDetail = () => {
 
         <SectionDivider />
 
-        {/* 섹션 4: 푸터 (그라디언트는 전체 페이지 너비) */}
-        <div className={styles.footerGradientWrap}>
-          <section className={styles.sectionFooter}>
-            <p className={styles.footerText}>
-              © {new Date().getFullYear()}. BAEK CHANGYEOP. ALL rights reserved.
-            </p>
-          </section>
-        </div>
+        {/* 섹션 4: 푸터 (Footer 컴포넌트 재사용) */}
+        <Footer />
       </div>
     </Layout>
   );
