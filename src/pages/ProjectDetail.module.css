@@ -361,10 +361,9 @@
   letter-spacing: 0em;
 }
 
-/* ----- 섹션 4: 푸터 (그라디언트는 전체 페이지 너비) ----- */
+/* ----- 섹션 4: 푸터 (100vw 대신 100%로 가로 스크롤바 방지) ----- */
 .footerGradientWrap {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
   background: linear-gradient(
     to top,
     rgba(0, 85, 254, 0.22) 0%,

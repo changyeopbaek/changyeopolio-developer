@@ -301,7 +301,7 @@ export const ProjectDetail = () => {
         <div className={styles.footerGradientWrap}>
           <section className={styles.sectionFooter}>
             <p className={styles.footerText}>
-              © 2025. BAEK CHANGYEOP. ALL rights reserved.
+              © {new Date().getFullYear()}. BAEK CHANGYEOP. ALL rights reserved.
             </p>
           </section>
         </div>

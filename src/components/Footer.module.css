@@ -1,7 +1,6 @@
-/* contentColumn(1080px) 밖으로 그라디언트만 전체 뷰포트 너비로 확장 */
+/* 푸터 그라디언트 (100vw 대신 100%로 가로 스크롤바 방지) */
 .footerWrap {
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
   background: linear-gradient(
     to top,
     rgba(0, 85, 254, 0.22) 0%,
