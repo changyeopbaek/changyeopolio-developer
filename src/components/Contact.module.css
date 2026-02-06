@@ -36,6 +36,14 @@
   margin-bottom: 2rem;
   text-transform: uppercase;
   user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleLine1,
+.titleLine2 {
+  display: block;
 }
 
 .description {

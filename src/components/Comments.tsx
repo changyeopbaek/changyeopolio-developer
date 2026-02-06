@@ -83,6 +83,7 @@ const FOLLOW_MAX_OFFSET = 24;
 export const Comments = () => {
   const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
   const [skipTransition, setSkipTransition] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [leftOffset, setLeftOffset] = useState({ x: 0, y: 0 });
   const [rightOffset, setRightOffset] = useState({ x: 0, y: 0 });
   const sectionRef = useRef<HTMLElement>(null);
@@ -98,11 +99,12 @@ export const Comments = () => {
   const goToSlide = (i: number) => setCurrentIndex(N + i);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => prev + 1);
     }, AUTO_SLIDE_MS);
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused]);
 
   /* 슬라이드 끝에서 중앙 세트로 리셋 → 끊김 없는 무한 루프 */
   useEffect(() => {
@@ -161,14 +163,18 @@ export const Comments = () => {
       }
     };
 
+    const handleMouseEnter = () => setIsPaused(true);
     const handleMouseLeave = () => {
       setLeftOffset({ x: 0, y: 0 });
       setRightOffset({ x: 0, y: 0 });
+      setIsPaused(false);
     };
 
+    section.addEventListener("mouseenter", handleMouseEnter);
     section.addEventListener("mousemove", handleMouseMove);
     section.addEventListener("mouseleave", handleMouseLeave);
     return () => {
+      section.removeEventListener("mouseenter", handleMouseEnter);
       section.removeEventListener("mousemove", handleMouseMove);
       section.removeEventListener("mouseleave", handleMouseLeave);
     };
