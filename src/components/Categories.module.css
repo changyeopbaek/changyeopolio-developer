@@ -45,11 +45,8 @@
   background: linear-gradient(to left, var(--bg-primary) 30%, transparent 100%);
 }
 
-.scrollContent {
+.marquee {
   display: flex;
-  gap: 4rem;
-  animation: scroll 10s linear infinite;
-  will-change: transform;
 }
 
 .category {
@@ -64,6 +61,7 @@
   transition: color 0.3s ease;
   user-select: none;
   text-decoration: none;
+  margin-right: 64px;
 }
 
 .category:hover,
@@ -76,16 +74,6 @@
   text-decoration: none;
 }
 
-/* 무한 루프: 3복사본이므로 한 복사본 너비만큼만 이동 (끊김 없음) */
-@keyframes scroll {
-  from {
-    transform: translateX(calc(-100% / 3));
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
 @media (max-width: 768px) {
   .section {
     padding: 40px 0;
@@ -94,18 +82,10 @@
   .category {
     font-size: 1.2rem;
   }
-
-  .scrollContent {
-    gap: 3rem;
-  }
 }
 
 @media (max-width: 480px) {
   .category {
     font-size: 1rem;
-  }
-
-  .scrollContent {
-    gap: 2rem;
   }
 }

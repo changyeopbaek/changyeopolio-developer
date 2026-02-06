@@ -1,3 +1,4 @@
+import Marquee from "react-fast-marquee";
 import styles from "./Categories.module.css";
 
 const categories = [
@@ -15,15 +16,19 @@ export const Categories = () => {
     <section className={styles.section}>
       <div className={styles.container}>
         <div className={styles.scrollWrapper}>
-          <div className={styles.scrollContent}>
-            {[...categories, ...categories, ...categories].map(
-              (category, index) => (
-                <div key={index} className={styles.category}>
-                  {category}
-                </div>
-              )
-            )}
-          </div>
+          <Marquee
+            speed={100}
+            direction="right"
+            gradient={false}
+            pauseOnHover={false}
+            className={styles.marquee}
+          >
+            {categories.map((category, index) => (
+              <div key={index} className={styles.category}>
+                {category}
+              </div>
+            ))}
+          </Marquee>
         </div>
       </div>
     </section>

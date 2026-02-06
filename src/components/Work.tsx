@@ -25,6 +25,7 @@ export const Work = () => {
   const [cardSize, setCardSize] = useState({ width: 745, height: 447 });
   const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
   const [skipTransition, setSkipTransition] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [leftOffset, setLeftOffset] = useState({ x: 0, y: 0 });
   const [rightOffset, setRightOffset] = useState({ x: 0, y: 0 });
 
@@ -43,11 +44,12 @@ export const Work = () => {
   }, []);
 
   useEffect(() => {
+    if (isPaused) return;
     const timer = setInterval(() => {
       setCurrentIndex((prev) => prev + 1);
     }, AUTO_SLIDE_MS);
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused]);
 
   useEffect(() => {
     if (currentIndex >= 2 * N) {
@@ -105,14 +107,18 @@ export const Work = () => {
       }
     };
 
+    const handleMouseEnter = () => setIsPaused(true);
     const handleMouseLeave = () => {
       setLeftOffset({ x: 0, y: 0 });
       setRightOffset({ x: 0, y: 0 });
+      setIsPaused(false);
     };
 
+    section.addEventListener("mouseenter", handleMouseEnter);
     section.addEventListener("mousemove", handleMouseMove);
     section.addEventListener("mouseleave", handleMouseLeave);
     return () => {
+      section.removeEventListener("mouseenter", handleMouseEnter);
       section.removeEventListener("mousemove", handleMouseMove);
       section.removeEventListener("mouseleave", handleMouseLeave);
     };

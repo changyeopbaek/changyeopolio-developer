@@ -28,6 +28,14 @@
   text-align: center;
   margin-bottom: 4rem;
   text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleLine1,
+.titleLine2 {
+  display: block;
 }
 
 /* 컬럼 방향으로 카드 배치, 스크롤 시 1번 카드 위치에서 sticky로 덮임 */
@@ -186,7 +194,7 @@
 
 .cardContent {
   font-family: "DM Sans", sans-serif;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   font-weight: 400;
   color: rgba(246, 243, 240, 0.85);
   line-height: 1.55;
