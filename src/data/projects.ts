@@ -141,7 +141,7 @@ export const projectsList: Project[] = [
     referenceLinks: [],
   },
   {
-    id: 4,
+    id: 6,
     title: "Team B.O.B",
 
     shortDescription:
@@ -169,7 +169,7 @@ export const projectsList: Project[] = [
     referenceLinks: [],
   },
   {
-    id: 5,
+    id: 4,
     title: "Market Karly",
     shortDescription: "마켓 컬리의 UI를 벤치마킹한 쇼핑 플랫폼",
     image: "/project1.png",
@@ -199,7 +199,7 @@ export const projectsList: Project[] = [
     ],
   },
   {
-    id: 6,
+    id: 5,
     title: "타자의 세계",
     shortDescription:
       "사용자의 타자 실력을 기르면서 일상 단어와 개발 관련 단어까지 익힐 수 있는 재미있는 타자 게임 프로젝트",
