@@ -142,6 +142,34 @@ export const projectsList: Project[] = [
   },
   {
     id: 4,
+    title: "Team B.O.B",
+
+    shortDescription:
+      "골프 아카데미 Team B.O.B의 프로그램·시설을 소개하는 웹사이트",
+    image: "/teambob.webp",
+    tags: ["TEAM PJ", "REACT"],
+    serviceName: "Team B.O.B 골프 아카데미",
+    fullDescription:
+      "Team B.O.B를 외부에 알리기 위한 공개 소개용 웹사이트입니다. \n 홈·프로그램·시설(및 소개) 페이지를 React와 React Router로 구성하고, Tailwind CSS로 모바일·태블릿·데스크톱 브레이크포인트에 맞춰 섹션별 레이아웃을 나누어 구현했습니다. \n\n 공통 헤더·푸터, 풀블리드 배너·섹션, 디자인 기준에 맞춘 최대 너비(1440px) 정렬, 웹폰트(Pretendard) 적용 등 랜딩 중심의 UI 작업에 집중했습니다.",
+    fullDescriptionByViewport: {
+      mobile:
+        "Team B.O.B 소개용 공개 웹사이트입니다. \n 홈·프로그램·시설 페이지를 React로 만들고 Tailwind로 반응형을 맞췄습니다. \n\n 피그마 디자인 기반 헤더·푸터, 섹션형 랜딩, 1440 기준 데스크톱 정렬",
+    },
+    techStack: ["React", "Vite", "JavaScript", "Tailwind CSS", "React Router"],
+    role: "- WebsiteLayout \n - WebsiteHeader/Footer\n - Home·Program·Facility·About 페이지 \n - 반응형 섹션·이미지 배치",
+    retrospective:
+      "풀블리드용으로 `w-screen`(100vw)과 `left-1/2` / `-ml-[50vw]` 패턴을 쓰다 보니, 세로 스크롤바가 있을 때 `100vw`가 실제 보이는 영역보다 살짝 넓어져 아주 얇은 횡스크롤이 생겼습니다. 웹사이트 레이아웃의 `main`에 `overflow-x-clip`을 두어 넘치는 가로만 잘라내는 방식으로 정리했습니다. \n\n 또한 레이아웃에서 본문 전체를 `max-width: 1440px`로만 감싸면, 섹션 배경색이 좁은 띠로만 보이는 문제가 있어 본문은 전체 너비를 쓰고, 헤더·푸터·각 섹션 안쪽에서만 최대 너비를 맞추는 구조로 바꿨습니다. 시설 페이지 배너 문구처럼 시안이 ‘1440 기준’인 요소는 뷰포트가 아니라 `max-w-[1440px]` 컨테이너 안에서 여백을 주어 정렬했습니다. \n\n 디자인 픽셀에 맞춘 고정 폭·절대 배치가 많아, 브레이크포인트마다 별도 마크업을 두는 방식이었는데 재사용은 적지만 시안 재현에는 유리했고, 대신 레이아웃 계층(풀블리드 vs 콘텐츠 폭)을 일관되게 정리해 두는 것이 유지보수에 중요하다고 느꼈습니다.",
+    retrospectiveByViewport: {
+      tablet:
+        "`w-screen`(100vw) 풀블리드 때문에 스크롤바와 맞물려 얇은 횡스크롤이 생겨, 웹사이트 `main`에 `overflow-x-clip`으로 가로 넘침을 잘랐습니다. \n\n Outlet만 1440으로 묶으면 배경이 잘리는 문제가 있어 본문 전체 너비와 내부 `max-width`를 분리했고, 시설 배너 텍스트는 1440px 기준 컨테이너 안에서 정렬했습니다. \n\n 브레이크포인트별 마크업은 시안 재현에 유리했지만, 풀블리드와 콘텐츠 폭의 규칙을 통일해 두는 것이 이후 수정에 도움이 된다고 느꼈습니다.",
+      mobile:
+        "`w-screen`(100vw) 때문에\n 스크롤바와 겹쳐 얇은 횡스크롤이 났고,\n `main`에 `overflow-x-clip`으로 잘랐습니다.\n\n Outlet만 1440이면 배경이 잘려\n 전체 너비와 내부 `max-width`를 나눴고,\n 시설 배너는 1440 컨테이너 기준으로 맞췄습니다.\n\n 시안 픽셀 대응은 브레이크포인트별\n 마크업이 많아져서, 레이아웃 규칙을\n 통일해 두는 게 중요하다고 느꼈습니다.",
+    },
+
+    referenceLinks: [],
+  },
+  {
+    id: 5,
     title: "Market Karly",
     shortDescription: "마켓 컬리의 UI를 벤치마킹한 쇼핑 플랫폼",
     image: "/project1.png",
@@ -171,7 +199,7 @@ export const projectsList: Project[] = [
     ],
   },
   {
-    id: 5,
+    id: 6,
     title: "타자의 세계",
     shortDescription:
       "사용자의 타자 실력을 기르면서 일상 단어와 개발 관련 단어까지 익힐 수 있는 재미있는 타자 게임 프로젝트",
@@ -204,32 +232,6 @@ export const projectsList: Project[] = [
         url: "https://typing-world.netlify.app/",
       },
     ],
-  },
-  {
-    id: 6,
-    title: "RallyOn",
-    shortDescription: "배드민턴 동호인을 위한 개인 맞춤 통합 플랫폼",
-    image: "/comingsoon.png",
-    tags: ["TEAM PJ"],
-    serviceName: "RallyOn",
-    fullDescription: "기획중입니다.",
-    techStack: [],
-    role: "",
-    retrospective: "",
-    referenceLinks: [],
-  },
-  {
-    id: 7,
-    title: "Untitled",
-    shortDescription: "방송 출연자 의상, 액세서리 정보 제공 서비스",
-    image: "/comingsoon.png",
-    tags: ["INDIVIDUAL PJ"],
-    serviceName: "Untitled",
-    fullDescription: "기획중입니다.",
-    techStack: [],
-    role: "",
-    retrospective: "",
-    referenceLinks: [],
   },
 ];
 
